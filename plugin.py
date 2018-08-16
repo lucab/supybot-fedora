@@ -515,6 +515,25 @@ class Fedora(callbacks.Plugin):
                    person).encode('utf-8'))
     himynameis = wrap(himynameis, ['text'])
 
+    def moin(self, irc, msg, args):
+        """takes no arguments
+
+        Return user information about the invoking nickname,
+        from the Fedora Account System.
+        Mostly useful for meeting roll call."""
+        try:
+            # TODO(lucab): by_nickname lookup does not exist yet.
+            person = self.fasclient.person_by_nickname(msg.nick)
+        except:
+            irc.reply('Something blew up, please try again')
+            return
+        if not person:
+            irc.reply('Nickname not found')
+            return
+        irc.reply(('%(username)s \'%(human_name)s\' <%(email)s>' %
+                   person).encode('utf-8'))
+    moin = wrap(moin)
+
     def dctime(self, irc, msg, args, dcname):
         """<dcname>
 
